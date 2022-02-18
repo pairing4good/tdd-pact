@@ -1,5 +1,5 @@
 # Purpose
-This application lists all of the available todo items ordered by the newest to oldest due date
+This application lists all of the available todo items ordered by due date
 
 # Start App
 

@@ -6,6 +6,9 @@ This tutorial demonstrates how to set up a contract test between multiple [React
 
 > **Provider**: An application (often called a service) that provides functionality or data for other applications to use, often via an API. For applications that use HTTP, the provider is the application that returns the response. For applications that use queues, the provider (also called producer) is the application that writes the messages to the queue. https://docs.pact.io/getting_started/how_pact_works
 
+<details>
+  <summary>Tutorial Approach</summary>
+  
 ## Tutorial Approach
 This project has 4 consumers:
 - consumer-todo-all
@@ -43,7 +46,12 @@ However, however each consumer uses the response in different ways.  The consume
 
 In this tutorial we will test drive each consumer interaction with the provider.  Tests will start in each consumer and the resulting contract will drive the creation of the provider's endpoint.  This is called [consumer driven contract testing](https://docs.pact.io/#consumer-driven-contracts).
 
-##Running Applications Together
+</details>
+
+<details>
+  <summary>Running Applications Together</summary>
+  
+## Running Applications Together
 ### Prerequisites
 - [Node](https://nodejs.org/) 14 or higher
 - [Java](https://aws.amazon.com/corretto) 8 or higher
@@ -51,8 +59,15 @@ In this tutorial we will test drive each consumer interaction with the provider.
 ### Steps
 1. Open a separate terminal window for each application.
 1. Within each terminal window `cd` into the application that that window will run (example: `cd {your-path-to-this-project}/tdd-pact/consumer-todo-all`)
-1. Start the application
+1. Start the application *(see each application's `README.md` for more information)*
     1. For the consumer applications run `npm start` within each terminal window.
     1. For the provider-todo application run `./mvnw spring-boot:run`. Open http://localhost:3000/todo
 
+</details>
+
+<details>
+  <summary>Test Driving Consumer ToDo All Contract</summary>
+
+
+</details>
 
