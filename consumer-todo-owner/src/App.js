@@ -3,13 +3,15 @@ import './App.css';
 
 import React, { useState, useEffect } from 'react';
 import { findAll } from './ToDoRepository'
+import { filter } from './ToDoFilter'
+import { transform } from './ToDoTransform'
 
 function App() {
 
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    setTodos(findAll());
+    setTodos(transform(filter(findAll())));
   }, []);
 
   return (

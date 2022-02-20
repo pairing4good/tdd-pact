@@ -17,19 +17,19 @@ describe('List ToDos', () => {
     cy.get('.todo-list-1 li').eq(0).should('have.text', 'Wash the dishes')
     cy.get('.todo-list-1 li').eq(1).should('have.text', 'Winterize the house')
 
-    cy.get('.todo-list li span.todo-owner').eq(2).should('have.text', 'zloda')
-    cy.get('.todo-list-2 li').should('have.length', 1)
-    cy.get('.todo-list-2 li').eq(0).should('have.text', 'Fold the laundry')
+    cy.get('.todo-list li span.todo-owner').eq(2).should('have.text', 'jbrown')
+    cy.get('.todo-list-2 li').should('have.length', 2)
+    cy.get('.todo-list-2 li').eq(0).should('have.text', 'Change the car oil')
+    cy.get('.todo-list-2 li').eq(1).should('have.text', 'Fix the gate')
 
     cy.get('.todo-list li span.todo-owner').eq(3).should('have.text', 'mwhite')
     cy.get('.todo-list-3 li').should('have.length', 2)
     cy.get('.todo-list-3 li').eq(0).should('have.text', 'Weed the garden')
     cy.get('.todo-list-3 li').eq(1).should('have.text', 'Renew your drivers license')
 
-    cy.get('.todo-list li span.todo-owner').eq(4).should('have.text', 'jbrown')
-    cy.get('.todo-list-4 li').should('have.length', 2)
-    cy.get('.todo-list-4 li').eq(0).should('have.text', 'Change the car oil')
-    cy.get('.todo-list-4 li').eq(1).should('have.text', 'Fix the gate')
+    cy.get('.todo-list li span.todo-owner').eq(4).should('have.text', 'zloda')
+    cy.get('.todo-list-4 li').should('have.length', 1)
+    cy.get('.todo-list-4 li').eq(0).should('have.text', 'Fold the laundry')
   })
 
 })
