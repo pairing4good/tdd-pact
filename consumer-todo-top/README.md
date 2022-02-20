@@ -1,5 +1,5 @@
 # Purpose
-This application lists the top 5 most recently created todos
+This application lists the newest top 5 todos
 
 # Start App
 
