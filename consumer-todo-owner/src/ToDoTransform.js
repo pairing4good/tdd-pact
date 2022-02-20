@@ -12,6 +12,5 @@ export function transform(todos){
       currentOwner = todo.owner
     }
   });
-  console.log(result)
   return result
 };
