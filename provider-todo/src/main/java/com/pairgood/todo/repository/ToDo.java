@@ -29,34 +29,6 @@ public class ToDo implements Comparable<ToDo>{
         return id;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public Date getLastModified() {
-        return lastModified;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;

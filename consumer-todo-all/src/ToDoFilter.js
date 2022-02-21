@@ -1,5 +1,5 @@
 function custom_sort(a, b) {
-  return  new Date(a.id).getTime() - new Date(b.id).getTime();
+  return  a.id - b.id;
 }
 
 export function filter(todos){

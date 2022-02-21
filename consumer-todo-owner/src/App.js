@@ -18,10 +18,10 @@ function App() {
     <div>
       <h1>todos</h1>
       <ul class="todo-list">
-        {todos.map((todo, index) => 
-          <li><span class="todo-owner">{todo.owner}</span>
-            <ul class={"todo-list-"+index}>{todo.todos.map((ownedTodo) => 
-              <li>{ownedTodo.description}</li>)}
+        {todos.map((todo, ownerIndex) => 
+          <li data-testid={"test-owner-" + ownerIndex}><span class="todo-owner">{todo.owner}</span>
+            <ul class={"todo-list-"+ownerIndex}>{todo.todos.map((ownedTodo, descIndex) => 
+              <li data-testid={"test-description-" + ownerIndex + "-" + descIndex}>{ownedTodo.description}</li>)}
             </ul>
           </li>
         )}

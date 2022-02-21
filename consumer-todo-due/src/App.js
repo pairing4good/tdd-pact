@@ -17,7 +17,7 @@ function App() {
     <div>
       <h1>todos</h1>
       <ul class="todo-list">
-        {todos.map((todo) => <li>{new Date(todo.dueDate).toLocaleDateString()} {todo.description}</li>)}
+        {todos.map((todo, index) => <li data-testid={"test-description-" + index}>{new Date(todo.dueDate).toLocaleDateString()} {todo.description}</li>)}
       </ul>
     </div>
   );
