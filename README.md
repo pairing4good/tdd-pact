@@ -67,7 +67,82 @@ In this tutorial we will test drive each consumer interaction with the provider.
 
 <details>
   <summary>Test Driving Consumer ToDo All Contract</summary>
+  The first step in test driving the contract between the consumer and the provider is to write a unit test.
 
+  ### Set Up
+
+  - Sign up for a free [Pactflow Account](https://pactflow.io/try-for-free/)
+  - Copy your [Pactflow Copy Environment Variables](https://docs.pactflow.io/#configuring-your-api-token)
+  - Add these these Environment Variables to your machine
+  - run `npm i @pact-foundation/pact`
+  - In your `package.json` file add the following script
+
+  ```json
+  "scripts": {
+    ...,
+    "pact:publish": "pact-broker publish ./pacts --consumer-app-version=1.0.0 --broker-base-url=$PACT_BROKER_BASE_URL --broker-token=$PACT_BROKER_TOKEN"
+  },
+  ```
+
+  ### Write a failing test
+
+  ```js
+import { Pact } from '@pact-foundation/pact';
+import { Matchers } from '@pact-foundation/pact';
+import { findAll } from '../ToDoRepository';
+const { eachLike } = Matchers;
+
+const provider = new Pact({
+  consumer: 'ToDoWeb',
+  provider: 'ToDoAPI',
+});
+
+describe('ToDo Service', () => {
+    describe('When a request to list all todos is made', () => {
+      beforeAll(() =>
+        provider.setup().then(() => {
+          provider.addInteraction({
+            uponReceiving: 'a request to list all todos',
+            withRequest: {
+              method: 'GET',
+              path: '/todos',
+            },
+            willRespondWith: {
+                body: eachLike({
+                  id: 1,
+                  description: 'description 1',
+                }),
+                status: 200,
+                headers: {
+                  'Content-Type': 'application/json; charset=utf-8',
+                },
+              },
+            })
+          }))
+  
+      test('should return the correct data', async () => {
+        const response = await findAll(provider.mockService.baseUrl);
+        expect(response[0].id).toBe(1);
+        expect(response[0].description).toBe('description 1');
+      });
+  
+      afterEach(() => provider.verify());
+      afterAll(() => provider.finalize());
+    });
+  });
+  ```
+- `provider = new Pact({...` creates a mock API server that listens for calls from `ToDoRepository.findAll()`.  This is powerful because now the consumer can call a provider before the real endpoint even exists. 
+- `provider.addInteraction({...` sets up canned API endpoint responses
+- `provider.verify()` validates that the interactions you set up were actually called
+- `provider.finalize()` writes the pact file to the `pacts` directory at the root of `consumer-todo-all` and shuts down the mock server.
+
+### Run Integration Test
+- run `npm test`
+- This will produce a contract in the `pacts` directory
+
+### Publish Contract to Pactflow
+- run `npm run pact:publish`
+- Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoWeb ∞ ToDoAPI` listed under the `Integration` heading
 
 </details>
 

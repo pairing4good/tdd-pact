@@ -19,7 +19,7 @@ public class ToDoController {
         this.toDoRepository = toDoRepository;
     }
 
-    @GetMapping("/todo")
+    @GetMapping("/todos")
     public List<ToDo> list(){
         return toDoRepository.list();
     }

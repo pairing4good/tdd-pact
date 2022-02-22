@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@pact-foundation/pact": "^9.17.2",
+    "@pact-foundation/pact-node": "^10.17.1",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
     "@testing-library/user-event": "^13.5.0",
@@ -16,7 +18,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test-all": "react-scripts test --watchAll=false && npx cypress run --headless",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "pact:publish": "pact-broker publish ./pacts --consumer-app-version=1.0.0 --broker-base-url=$PACT_BROKER_BASE_URL --broker-token=$PACT_BROKER_TOKEN"
   },
   "eslintConfig": {
     "extends": [
