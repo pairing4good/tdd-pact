@@ -316,3 +316,44 @@ describe('ToDo Service', () => {
 [Code for this section](https://github.com/pairing4good/tdd-pact/commit/041644bd15561a7b4bd167bc338399f538d4998a)
 
 </details>
+
+
+<details>
+  <summary>Test Driving Provider Through New Contract</summary>
+  The next step is to drive the Provider API based on the newly published contracts.
+
+- run `./mvnw test`
+- The test fails with the message
+
+```
+1) Verifying a pact between ToDoWebDue and ToDoAPI - a request to list all todos has a matching body
+
+    1.1) body: $.0 Actual map is missing the following keys: dueDate
+
+        {
+        -  "description": "description 1",
+        -  "dueDate": "2001-01-01T01:01:01.100+00:00",
+        +  "description": "Take out the garbage",
+          "id": 1
+        }
+```
+
+- First, note that we did not have to change our `ContractVerificationTest` test.  It pulls down all of the consumer contracts each time it runs.  When new consumer needs are published this test fails.
+- The test failure specifies which consumer/provider relationship is being tested. `Verifying a pact between ToDoWebDue and ToDoAPI`
+- The test fails because `Actual map is missing the following keys: dueDate`
+
+### Make the test go green
+
+- The failing contract test drives the provider to add the following getter to `ToDo.java`
+```java
+public Date getDueDate() {
+    return dueDate;
+}
+```
+
+- Rerun `./mvnw test`
+- Green
+
+[Code for this section]()
+
+</details>

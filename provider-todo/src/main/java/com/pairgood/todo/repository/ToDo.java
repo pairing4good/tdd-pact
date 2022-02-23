@@ -33,6 +33,10 @@ public class ToDo implements Comparable<ToDo>{
         return description;
     }
 
+    public Date getDueDate() {
+        return dueDate;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
