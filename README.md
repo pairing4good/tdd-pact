@@ -580,7 +580,15 @@ describe('ToDo Service', () => {
 
     1.1) body: $.0 Actual map is missing the following keys: created
 
-        [Replace Me]
+        {
+        -  "created": "2001-01-01T01:01:01.100+00:00",
+        -  "description": "description 1",
+        -  "id": 1
+        +  "description": "Take out the garbage",
+        +  "dueDate": "2022-02-23T19:52:12.254+00:00",
+        +  "id": 1,
+        +  "owner": "bsmith"
+        }
 ```
 
 - The test failure specifies which consumer/provider relationship is being tested. `Verifying a pact between ToDoWebTop and ToDoAPI`
@@ -590,7 +598,7 @@ describe('ToDo Service', () => {
 
 - The failing contract test drives the provider to add the following getter to `ToDo.java`
 ```java
-public String getCreated() {
+public Date getCreated() {
     return created;
 }
 ```
