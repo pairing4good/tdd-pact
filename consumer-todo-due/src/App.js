@@ -15,8 +15,8 @@ function App() {
   return (
     <div>
       <h1>todos</h1>
-      <ul class="todo-list">
-        {todos.map((todo, index) => <li data-testid={"test-description-" + index}>{new Date(todo.dueDate).toLocaleDateString()} {todo.description}</li>)}
+      <ul className="todo-list">
+        {todos.map((todo, index) => <li key={`todo-list-item-${index}`} data-testid={"test-description-" + index}>{new Date(todo.dueDate).toLocaleDateString()} {todo.description}</li>)}
       </ul>
     </div>
   );
