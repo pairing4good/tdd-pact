@@ -360,7 +360,7 @@ public Date getDueDate() {
 
 
 <details>
-  <summary>Test Driving Consumer ToDo Due Contract</summary>
+  <summary>Test Driving Consumer ToDo Owner Contract</summary>
   With the first two consumer contracts in place we will add a third consumer contract from a third front end application.
 
   ### Set Up
@@ -439,5 +439,47 @@ describe('ToDo Service', () => {
 - Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoWebOwner ∞ ToDoAPI` listed under the `Integration` heading
 
 [Code for this section](https://github.com/pairing4good/tdd-pact/commit/a9db233c4301441bd2c1345f0a28b84eae3c7b1b)
+
+</details>
+
+
+<details>
+  <summary>Test Driving Provider Through Newest Contract</summary>
+  The next step is to drive the Provider API based on the newly published contracts.
+
+- run `./mvnw test`
+- The test fails with the message
+
+```
+1) Verifying a pact between ToDoWebOwner and ToDoAPI - a request to list all todos has a matching body
+
+    1.1) body: $.0 Actual map is missing the following keys: owner
+
+        {
+        -  "description": "description 1",
+        -  "id": 1,
+        -  "owner": "atest"
+        +  "description": "Take out the garbage",
+        +  "dueDate": "2022-02-23T19:52:12.254+00:00",
+        +  "id": 1
+        }
+```
+
+- The test failure specifies which consumer/provider relationship is being tested. `Verifying a pact between ToDoWebOwner and ToDoAPI`
+- The test fails because `Actual map is missing the following keys: owner`
+
+### Make the test go green
+
+- The failing contract test drives the provider to add the following getter to `ToDo.java`
+```java
+public String getOwner() {
+    return owner;
+}
+```
+
+- Rerun `./mvnw test`
+- Green
+
+[Code for this section]()
 
 </details>

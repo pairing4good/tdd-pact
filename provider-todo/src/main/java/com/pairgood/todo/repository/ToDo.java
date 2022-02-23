@@ -36,6 +36,10 @@ public class ToDo implements Comparable<ToDo>{
     public Date getDueDate() {
         return dueDate;
     }
+
+    public String getOwner() {
+        return owner;
+    }
     
     @Override
     public int hashCode() {
