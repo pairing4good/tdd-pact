@@ -11,7 +11,7 @@ function App() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    setTodos(transform(filter(findAll())));
+    findAll(process.env.REACT_APP_TODO_API_BASE_URL).then( todos => setTodos(transform(filter(todos))));
   }, []);
 
   return (

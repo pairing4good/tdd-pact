@@ -357,3 +357,87 @@ public Date getDueDate() {
 [Code for this section](https://github.com/pairing4good/tdd-pact/commit/4fef904b17f331628bbfde1d22671c38479c4a34)
 
 </details>
+
+
+<details>
+  <summary>Test Driving Consumer ToDo Due Contract</summary>
+  With the first two consumer contracts in place we will add a third consumer contract from a third front end application.
+
+  ### Set Up
+
+  - `cd` into the `consumer-todo-owner` directory
+  - run `npm i @pact-foundation/pact`
+  - In your `package.json` file add the following script
+
+  ```
+  "scripts": {
+    ... ,
+    "pact:publish": "pact-broker publish ./pacts --consumer-app-version=1.0.0 --broker-base-url=$PACT_BROKER_BASE_URL --broker-token=$PACT_BROKER_TOKEN"
+  },
+  ```
+
+  ### Write a failing test
+
+- add a new test under `src/test` with the name `ToDoIntegration.test.js` and the following contents
+
+```js
+import { Pact } from '@pact-foundation/pact';
+import { Matchers } from '@pact-foundation/pact';
+import { like } from '@pact-foundation/pact/src/dsl/matchers';
+import { findAll } from '../ToDoRepository';
+const { eachLike } = Matchers;
+
+
+const provider = new Pact({
+  consumer: 'ToDoWebOwner',
+  provider: 'ToDoAPI',
+});
+
+describe('ToDo Service', () => {
+    describe('When a request to list all todos is made', () => {
+      beforeAll(() =>
+        provider.setup().then(() => {
+          provider.addInteraction({
+            uponReceiving: 'a request to list all todos',
+            withRequest: {
+              method: 'GET',
+              path: '/todos',
+            },
+            willRespondWith: {
+                body: eachLike({
+                  id: like(1),
+                  description: like('description 1'),
+                  owner: like("atest")
+                }),
+                status: 200,
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            })
+          }))
+  
+      test('should return the correct data', async () => {
+        const response = await findAll(provider.mockService.baseUrl);
+        expect(response[0].id).toBe(1);
+        expect(response[0].description).toBe('description 1');
+        expect(response[0].owner).toBe('atest');
+      });
+  
+      afterEach(() => provider.verify());
+      afterAll(() => provider.finalize());
+    });
+  });
+```
+
+### Run Integration Test
+- run `npm test`
+- This will produce a contract in the `pacts` directory
+
+### Publish Contract to Pactflow
+- run `npm run pact:publish`
+- Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoWebOwner ∞ ToDoAPI` listed under the `Integration` heading
+
+[Code for this section]()
+
+</details>

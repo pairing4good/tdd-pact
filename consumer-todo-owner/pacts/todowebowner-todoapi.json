@@ -1,6 +1,6 @@
 {
   "consumer": {
-    "name": "ToDoWeb"
+    "name": "ToDoWebOwner"
   },
   "provider": {
     "name": "ToDoAPI"
@@ -20,7 +20,8 @@
         "body": [
           {
             "id": 1,
-            "description": "description 1"
+            "description": "description 1",
+            "owner": "atest"
           }
         ],
         "matchingRules": {
@@ -34,6 +35,9 @@
             "match": "type"
           },
           "$.body[*].description": {
+            "match": "type"
+          },
+          "$.body[*].owner": {
             "match": "type"
           }
         }
