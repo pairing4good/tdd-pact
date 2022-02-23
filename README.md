@@ -609,3 +609,11 @@ public Date getCreated() {
 [Code for this section](https://github.com/pairing4good/tdd-pact/commit/9cb0bea9ba8160e35c9d68a3ad85f30877e7e5bc)
 
 </details>
+
+<details>
+  <summary>Pactflow Network Diagram</summary>
+
+  One powerful benefit of using Pactflow is their network diagram.  This helps teams visualize consumer/producer relationships across their enterprise.
+
+  ![Pactflow Network Diagram](img/pactflow.png)
+</details>
