@@ -216,7 +216,7 @@ public class ContractVerificationTest {
 
 ### Make the test go green
 
-- Add the following getter to `ToDo.java`
+- The failing contract test drives the provider to add the following getter to `ToDo.java`
 ```java
 public String getDescription() {
     return description;
