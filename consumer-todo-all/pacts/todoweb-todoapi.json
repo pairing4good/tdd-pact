@@ -15,7 +15,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=utf-8"
+          "Content-Type": "application/json"
         },
         "body": [
           {
@@ -28,6 +28,12 @@
             "min": 1
           },
           "$.body[*].*": {
+            "match": "type"
+          },
+          "$.body[*].id": {
+            "match": "type"
+          },
+          "$.body[*].description": {
             "match": "type"
           }
         }

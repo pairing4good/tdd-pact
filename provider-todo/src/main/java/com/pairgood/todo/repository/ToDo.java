@@ -29,6 +29,10 @@ public class ToDo implements Comparable<ToDo>{
         return id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

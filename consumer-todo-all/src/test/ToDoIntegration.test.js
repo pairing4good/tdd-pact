@@ -1,5 +1,6 @@
 import { Pact } from '@pact-foundation/pact';
 import { Matchers } from '@pact-foundation/pact';
+import { like } from '@pact-foundation/pact/src/dsl/matchers';
 import { findAll } from '../ToDoRepository';
 const { eachLike } = Matchers;
 
@@ -21,12 +22,12 @@ describe('ToDo Service', () => {
             },
             willRespondWith: {
                 body: eachLike({
-                  id: 1,
-                  description: 'description 1',
+                  id: like(1),
+                  description: like('description 1'),
                 }),
                 status: 200,
                 headers: {
-                  'Content-Type': 'application/json; charset=utf-8',
+                  'Content-Type': 'application/json',
                 },
               },
             })

@@ -89,8 +89,10 @@ In this tutorial we will test drive each consumer interaction with the provider.
   ```js
 import { Pact } from '@pact-foundation/pact';
 import { Matchers } from '@pact-foundation/pact';
+import { like } from '@pact-foundation/pact/src/dsl/matchers';
 import { findAll } from '../ToDoRepository';
 const { eachLike } = Matchers;
+
 
 const provider = new Pact({
   consumer: 'ToDoWeb',
@@ -109,12 +111,12 @@ describe('ToDo Service', () => {
             },
             willRespondWith: {
                 body: eachLike({
-                  id: 1,
-                  description: 'description 1',
+                  id: like(1),
+                  description: like('description 1'),
                 }),
                 status: 200,
                 headers: {
-                  'Content-Type': 'application/json; charset=utf-8',
+                  'Content-Type': 'application/json',
                 },
               },
             })
@@ -148,3 +150,82 @@ describe('ToDo Service', () => {
 
 </details>
 
+<details>
+  <summary>Test Driving Provider Through Published Contracts</summary>
+  The next step is to drive the Provider API based on the published contracts.
+
+  ### Set Up
+
+  - Add these these Environment Variables to your machine
+    - export PACT_BROKER_HOST=[your username].pactflow.io
+    - export PACT_BROKER_BASE_URL=https://$PACT_BROKER_HOST
+  - Add depencency to the pom.xml
+  ```xml
+  <dependency>
+    <groupId>au.com.dius.pact.provider</groupId>
+    <artifactId>junit5spring</artifactId>
+    <version>4.3.5</version>
+  </dependency>
+  ```
+
+### Write a failing test
+
+  ```java
+package com.pairgood.todo.contract;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import au.com.dius.pact.provider.junit5.HttpTestTarget;
+import au.com.dius.pact.provider.junit5.PactVerificationContext;
+import au.com.dius.pact.provider.junitsupport.Provider;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
+import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Provider("ToDoAPI")
+@PactBroker(scheme = "https", host = "${PACT_BROKER_HOST}", authentication = @PactBrokerAuth(token = "${PACT_BROKER_TOKEN}"))
+public class ContractVerificationTest {
+
+    @LocalServerPort
+    private int port;
+
+    @BeforeEach
+    public void setUp(PactVerificationContext context){
+        context.setTarget(new HttpTestTarget("localhost", port));
+    }
+
+    @TestTemplate
+    @ExtendWith(PactVerificationSpringProvider.class)
+    void pactVerificationTestTemplate(PactVerificationContext context) {
+      context.verifyInteraction();
+    }
+
+}
+  ```
+
+- This test downloads all of the contracts for `@Provider("ToDoAPI")` and runs them agains the running Spring Boot API
+- run `./mvnw test`
+- The test fails with the message `Actual map is missing the following keys: description`
+
+### Make the test go green
+
+- Add the following getter to `ToDo.java`
+```java
+public String getDescription() {
+    return description;
+}
+```
+
+- Rerun `./mvnw test`
+- Green
+
+[Code for this section]()
+
+</details>
