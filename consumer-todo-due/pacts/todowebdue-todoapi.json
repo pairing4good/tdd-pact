@@ -1,0 +1,52 @@
+{
+  "consumer": {
+    "name": "ToDoWebDue"
+  },
+  "provider": {
+    "name": "ToDoAPI"
+  },
+  "interactions": [
+    {
+      "description": "a request to list all todos",
+      "request": {
+        "method": "GET",
+        "path": "/todos"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "id": 1,
+            "description": "description 1",
+            "dueDate": "2001-01-01T01:01:01.100+00:00"
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "min": 1
+          },
+          "$.body[*].*": {
+            "match": "type"
+          },
+          "$.body[*].id": {
+            "match": "type"
+          },
+          "$.body[*].description": {
+            "match": "type"
+          },
+          "$.body[*].dueDate": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

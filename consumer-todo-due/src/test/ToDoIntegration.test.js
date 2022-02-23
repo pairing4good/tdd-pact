@@ -6,7 +6,7 @@ const { eachLike } = Matchers;
 
 
 const provider = new Pact({
-  consumer: 'ToDoWebAll',
+  consumer: 'ToDoWebDue',
   provider: 'ToDoAPI',
 });
 
@@ -24,6 +24,7 @@ describe('ToDo Service', () => {
                 body: eachLike({
                   id: like(1),
                   description: like('description 1'),
+                  dueDate: like('2001-01-01T01:01:01.100+00:00')
                 }),
                 status: 200,
                 headers: {
@@ -37,6 +38,7 @@ describe('ToDo Service', () => {
         const response = await findAll(provider.mockService.baseUrl);
         expect(response[0].id).toBe(1);
         expect(response[0].description).toBe('description 1');
+        expect(response[0].dueDate).toBe('2001-01-01T01:01:01.100+00:00');
       });
   
       afterEach(() => provider.verify());
