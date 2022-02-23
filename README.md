@@ -438,6 +438,6 @@ describe('ToDo Service', () => {
 - run `npm run pact:publish`
 - Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoWebOwner ∞ ToDoAPI` listed under the `Integration` heading
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-pact/commit/a9db233c4301441bd2c1345f0a28b84eae3c7b1b)
 
 </details>
