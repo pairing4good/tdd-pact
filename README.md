@@ -483,3 +483,121 @@ public String getOwner() {
 [Code for this section](https://github.com/pairing4good/tdd-pact/commit/2c436e3f738fe7d680682de2fc4bfb4ea8a193f5)
 
 </details>
+
+<details>
+  <summary>Test Driving Consumer ToDo Top Contract</summary>
+  With the first two consumer contracts in place we will add a third consumer contract from a third front end application.
+
+  ### Set Up
+
+  - `cd` into the `consumer-todo-top` directory
+  - run `npm i @pact-foundation/pact`
+  - In your `package.json` file add the following script
+
+  ```
+  "scripts": {
+    ... ,
+    "pact:publish": "pact-broker publish ./pacts --consumer-app-version=1.0.0 --broker-base-url=$PACT_BROKER_BASE_URL --broker-token=$PACT_BROKER_TOKEN"
+  },
+  ```
+
+  ### Write a failing test
+
+- add a new test under `src/test` with the name `ToDoIntegration.test.js` and the following contents
+
+```js
+import { Pact } from '@pact-foundation/pact';
+import { Matchers } from '@pact-foundation/pact';
+import { like } from '@pact-foundation/pact/src/dsl/matchers';
+import { findAll } from '../ToDoRepository';
+const { eachLike } = Matchers;
+
+
+const provider = new Pact({
+  consumer: 'ToDoWebTop',
+  provider: 'ToDoAPI',
+});
+
+describe('ToDo Service', () => {
+    describe('When a request to list all todos is made', () => {
+      beforeAll(() =>
+        provider.setup().then(() => {
+          provider.addInteraction({
+            uponReceiving: 'a request to list all todos',
+            withRequest: {
+              method: 'GET',
+              path: '/todos',
+            },
+            willRespondWith: {
+                body: eachLike({
+                  id: like(1),
+                  description: like('description 1'),
+                  created: like('2001-01-01T01:01:01.100+00:00')
+                }),
+                status: 200,
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            })
+          }))
+  
+      test('should return the correct data', async () => {
+        const response = await findAll(provider.mockService.baseUrl);
+        expect(response[0].id).toBe(1);
+        expect(response[0].description).toBe('description 1');
+        expect(response[0].created).toBe('2001-01-01T01:01:01.100+00:00');
+      });
+  
+      afterEach(() => provider.verify());
+      afterAll(() => provider.finalize());
+    });
+  });
+```
+
+### Run Integration Test
+- run `npm test`
+- This will produce a contract in the `pacts` directory
+
+### Publish Contract to Pactflow
+- run `npm run pact:publish`
+- Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoWebTop ∞ ToDoAPI` listed under the `Integration` heading
+
+[Code for this section]()
+
+</details>
+
+
+<details>
+  <summary>Test Driving Provider Through Newest Contract</summary>
+  The next step is to drive the Provider API based on the newly published contracts.
+
+- run `./mvnw test`
+- The test fails with the message
+
+```
+1) Verifying a pact between ToDoWebTop and ToDoAPI - a request to list all todos has a matching body
+
+    1.1) body: $.0 Actual map is missing the following keys: created
+
+        [Replace Me]
+```
+
+- The test failure specifies which consumer/provider relationship is being tested. `Verifying a pact between ToDoWebTop and ToDoAPI`
+- The test fails because `Actual map is missing the following keys: created`
+
+### Make the test go green
+
+- The failing contract test drives the provider to add the following getter to `ToDo.java`
+```java
+public String getCreated() {
+    return created;
+}
+```
+
+- Rerun `./mvnw test`
+- Green
+
+[Code for this section]()
+
+</details>
