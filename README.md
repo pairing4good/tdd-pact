@@ -1,6 +1,6 @@
 # tdd-pact
 ## Overview
-This tutorial demonstrates how to set up a contract test between multiple [React](https://reactjs.org/) applications (consumers)and a single [Spring Boot](https://spring.io/projects/spring-boot) service (provider).  This tutorial will use [Pact](https://pact.io/) to [test drive](https://en.wikipedia.org/wiki/Test-driven_development) each consumer call to the provider.
+This tutorial demonstrates how to set up a contract test between multiple [React](https://reactjs.org/) applications (consumers) and a single [Spring Boot](https://spring.io/projects/spring-boot) service (provider).  This tutorial will use [Pact](https://pact.io/) to [test drive](https://en.wikipedia.org/wiki/Test-driven_development) each consumer call to the provider.
 
 > **Consumer**: An application that makes use of the functionality or data from another application to do its job. For applications that use HTTP, the consumer is always the application that initiates the HTTP request (eg. the web front end), regardless of the direction of data flow. For applications that use queues, the consumer is the application that reads the message from the queue. https://docs.pact.io/getting_started/how_pact_works
 

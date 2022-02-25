@@ -9,18 +9,18 @@ public class ToDo implements Comparable<ToDo>{
     private final Date dueDate;
     private final int priority;
     private final Status status;
-    private final String owner;
+    private final Long ownerId;
     private final Date created;
     private final Date lastModified;
 
-    public ToDo(long id, String description, Date dueDate, int priority, Status status, String owner, Date created,
+    public ToDo(long id, String description, Date dueDate, int priority, Status status, long ownerId, Date created,
             Date lastModified) {
         this.id = id;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.status = status;
-        this.owner = owner;
+        this.ownerId = ownerId;
         this.created =created;
         this.lastModified = lastModified;
     }
@@ -37,8 +37,8 @@ public class ToDo implements Comparable<ToDo>{
         return dueDate;
     }
 
-    public String getOwner() {
-        return owner;
+    public Long getOwnerId() {
+        return ownerId;
     }
     
     public Date getCreated() {

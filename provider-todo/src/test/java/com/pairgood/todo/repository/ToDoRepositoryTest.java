@@ -10,7 +10,7 @@ public class ToDoRepositoryTest {
 
     @Test
     public void shouldSaveToDo(){
-        ToDo toDo = new ToDo(1, null, null, 0, null, null, null, null);
+        ToDo toDo = new ToDo(1, null, null, 0, null, 0, null, null);
         ToDoRepository repository = new ToDoRepository();
 
         repository.save(toDo);
@@ -23,11 +23,11 @@ public class ToDoRepositoryTest {
     @Test
     public void shouldFindAllToDos(){
         ToDoRepository repository = new ToDoRepository();
-        ToDo toDoFirst = new ToDo(1, null, null, 0, null, null, null, null);
-        ToDo toDoSecond = new ToDo(2, null, null, 0, null, null, null, null);
-        ToDo toDoThird = new ToDo(3, null, null, 0, null, null, null, null);
-        ToDo toDoFourth = new ToDo(4, null, null, 0, null, null, null, null);
-        ToDo toDoFifth = new ToDo(5, null, null, 0, null, null, null, null);
+        ToDo toDoFirst = new ToDo(1, null, null, 0, null, 0, null, null);
+        ToDo toDoSecond = new ToDo(2, null, null, 0, null, 0, null, null);
+        ToDo toDoThird = new ToDo(3, null, null, 0, null, 0, null, null);
+        ToDo toDoFourth = new ToDo(4, null, null, 0, null, 0, null, null);
+        ToDo toDoFifth = new ToDo(5, null, null, 0, null, 0, null, null);
 
         repository.save(toDoFirst);
         repository.save(toDoSecond);

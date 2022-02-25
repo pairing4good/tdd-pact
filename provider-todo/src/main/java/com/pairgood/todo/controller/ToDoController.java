@@ -2,6 +2,7 @@ package com.pairgood.todo.controller;
 
 import java.util.List;
 
+import com.pairgood.todo.map.ToDoMapper;
 import com.pairgood.todo.repository.ToDo;
 import com.pairgood.todo.repository.ToDoRepository;
 
@@ -13,14 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ToDoController {
     
-    private ToDoRepository toDoRepository;
+    private final ToDoRepository toDoRepository;
+    private final ToDoMapper toDoMapper;
 
-    public ToDoController(ToDoRepository toDoRepository){
+    public ToDoController(ToDoRepository toDoRepository, ToDoMapper toDoMapper){
         this.toDoRepository = toDoRepository;
+        this.toDoMapper = toDoMapper;
     }
 
     @GetMapping("/todos")
-    public List<ToDo> list(){
-        return toDoRepository.list();
+    public List<ToDoResponse> list(){
+        List<ToDo> todos = toDoRepository.list();
+        return toDoMapper.mapOwnerUsername(todos);
     }
 }
