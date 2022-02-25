@@ -774,7 +774,7 @@ public class Owner{
 - run `./mvnw pact:publish`
 - Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoAPI ∞ OwnerAPI` listed under the `Integration` heading
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-pact/commit/d35b1cf58624e0dd55917e197e34a46ddda8dbda)
 
 </details>
 
@@ -851,7 +851,7 @@ public String getUsername() {
 - Rerun `./mvnw test`
 - Green
 
-[Code for this section]()
+[Code for this section](https://github.com/pairing4good/tdd-pact/commit/b5593defd46087b0fc243539aed0791a6a4bada3)
 
 </details>
 
