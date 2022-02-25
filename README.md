@@ -611,6 +611,172 @@ public Date getCreated() {
 </details>
 
 <details>
+  <summary>Java Consumer to Java Provider</summary>
+
+  Many providers depend on other providers too.  In this section we will test drive a new owner provider that `provider-todo` will use to look up owner usernames.
+
+  ### Set Up
+
+  - `cd` into the `producer-todo` directory
+  - Add dependencies to the pom.xml
+
+```
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+  <groupId>au.com.dius</groupId>
+  <artifactId>pact-jvm-consumer-junit_2.11</artifactId>
+  <version>3.5.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+  - Add plugin to the pom.xml
+
+```
+<plugin>
+  <groupId>au.com.dius.pact.provider</groupId>
+  <artifactId>maven</artifactId>
+  <version>4.3.5</version>
+  <configuration>
+    <pactBrokerUrl>${env.PACT_BROKER_BASE_URL}</pactBrokerUrl>
+    <pactBrokerToken>${env.PACT_BROKER_TOKEN}</pactBrokerToken>
+    <pactBrokerAuthenticationScheme>Bearer</pactBrokerAuthenticationScheme>
+  </configuration>
+</plugin>
+```
+
+### Write a failing test
+
+- add a new test under `src/test/java/com/pairgood/todo/contract` with the name `ConsumerOwnerContractTest.java` and the following contents
+
+```java
+package com.pairgood.todo.contract;
+
+import au.com.dius.pact.consumer.Pact;
+import au.com.dius.pact.consumer.PactProviderRuleMk2;
+import au.com.dius.pact.consumer.PactVerification;
+import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
+import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
+import au.com.dius.pact.model.RequestResponsePact;
+import org.junit.Rule;
+import org.junit.Test;
+
+import java.util.Collections;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.pairgood.todo.service.Owner;
+import com.pairgood.todo.service.OwnerService;
+
+public class ConsumerOwnerContractTest {
+
+    private int port = 8080;
+
+    @Rule
+    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("OwnerAPI", "localhost", port, this);
+
+    @Pact(consumer = "ToDoAPI", provider = "OwnerAPI")
+    public RequestResponsePact createPact(PactDslWithProvider builder) {
+        Map<String, String> headers = Collections.singletonMap("Content-Type", "application/json");
+        PactDslJsonBody body = new PactDslJsonBody().stringType("username", "testUsername");
+
+        return builder
+          .given("test GET")
+            .uponReceiving("GET REQUEST")
+            .path("/owners/1")
+            .method("GET")
+          .willRespondWith()
+            .status(200)
+            .headers(headers)
+            .body(body)
+          .toPact();
+    }
+
+    @Test
+    @PactVerification()
+    public void shouldReturnOnwer(){
+        Owner owner = new OwnerService("http://localhost:" + port).findById(1);
+        assertNotNull(owner);
+        assertEquals("testUsername", owner.getUsername());
+    }
+}
+```
+
+- [@Rule](https://docs.pact.io/implementation_guides/jvm/consumer/junit/#using-the-pact-junit-rule) sets up and tears down the mock provider.
+- [@Pact](https://docs.pact.io/implementation_guides/jvm/consumer/junit/#using-the-pact-junit-rule) sets up the available mock provider endpoints, requests and responses.
+- [@PactVerification()](https://docs.pact.io/implementation_guides/jvm/consumer/junit/#using-the-pact-junit-rule) runs the `@Test` with the mock pact server running
+
+### Make it go green
+- add a new test under `src/main/java/com/pairgood/todo/service` with the name `OwnerService.java` and the following contents
+
+```java
+package com.pairgood.todo.service;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
+
+public class OwnerService {
+
+    private WebClient webClient;
+
+    public OwnerService(String baseUrl){
+        webClient= WebClient.builder()
+        .baseUrl(baseUrl)
+        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .build();
+    }
+
+    public Owner findById(long id){
+        return webClient.get()
+		.uri("/owners/" + id)
+		.retrieve()
+		.bodyToMono(Owner.class).block();
+    }
+}
+```
+- add a new test under `src/main/java/com/pairgood/todo/service` with the name `Owner.java` and the following contents
+
+```java
+package com.pairgood.todo.service;
+
+
+public class Owner{
+
+    private Long id;
+    private String username;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+}
+```
+- rerun the test
+- green
+
+### Publish pact
+- run `./mvnw pact:publish`
+- Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoAPI ∞ OwnerAPI` listed under the `Integration` heading
+</details>
+
+<details>
   <summary>Pactflow Network Diagram</summary>
 
   One powerful benefit of using Pactflow is their network diagram.  This helps teams visualize consumer/producer relationships across their enterprise.
