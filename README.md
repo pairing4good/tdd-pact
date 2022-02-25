@@ -686,8 +686,7 @@ public class ConsumerOwnerContractTest {
         PactDslJsonBody body = new PactDslJsonBody().stringType("username", "testUsername");
 
         return builder
-          .given("test GET")
-            .uponReceiving("GET REQUEST")
+          .uponReceiving("GET REQUEST")
             .path("/owners/1")
             .method("GET")
           .willRespondWith()
@@ -774,6 +773,86 @@ public class Owner{
 ### Publish pact
 - run `./mvnw pact:publish`
 - Log into your Pactflow server `https://[your username].pactflow.io/` and you should seed your new contract `ToDoAPI ∞ OwnerAPI` listed under the `Integration` heading
+
+[Code for this section]()
+
+</details>
+
+<details>
+  <summary>Test Driving Owner Provider Through Published Contract</summary>
+  The next step is to drive the Owner Provider API based on the published contracts.
+
+  ### Set Up
+
+  - Add these these Environment Variables to your machine
+  - Add depencency to the pom.xml
+
+```
+  <dependency>
+    <groupId>au.com.dius.pact.provider</groupId>
+    <artifactId>junit5spring</artifactId>
+    <version>4.3.5</version>
+  </dependency>
+```
+
+### Write a failing test
+
+```java
+package com.pairgood.owner.contract;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import au.com.dius.pact.provider.junit5.HttpTestTarget;
+import au.com.dius.pact.provider.junit5.PactVerificationContext;
+import au.com.dius.pact.provider.junitsupport.Provider;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
+import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Provider("ToDoAPI")
+@PactBroker(scheme = "https", host = "${PACT_BROKER_HOST}", authentication = @PactBrokerAuth(token = "${PACT_BROKER_TOKEN}"))
+public class ContractVerificationTest {
+
+    @LocalServerPort
+    private int port;
+
+    @BeforeEach
+    public void setUp(PactVerificationContext context){
+        context.setTarget(new HttpTestTarget("localhost", port));
+    }
+
+    @TestTemplate
+    @ExtendWith(PactVerificationSpringProvider.class)
+    void pactVerificationTestTemplate(PactVerificationContext context) {
+      context.verifyInteraction();
+    }
+
+}
+  ```
+- run `./mvnw test`
+- The test fails with the message `Actual map is missing the following keys: username`
+
+### Make the test go green
+
+- The failing contract test drives the provider to add the following getter to `Owner.java`
+```java
+public String getUsername() {
+    return username;
+}
+```
+
+- Rerun `./mvnw test`
+- Green
+
+[Code for this section]()
+
 </details>
 
 <details>

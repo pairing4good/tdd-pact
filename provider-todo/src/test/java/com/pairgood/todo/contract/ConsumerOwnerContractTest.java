@@ -31,8 +31,7 @@ public class ConsumerOwnerContractTest {
         PactDslJsonBody body = new PactDslJsonBody().stringType("username", "testUsername");
 
         return builder
-          .given("test GET")
-            .uponReceiving("GET REQUEST")
+          .uponReceiving("GET REQUEST")
             .path("/owners/1")
             .method("GET")
           .willRespondWith()
