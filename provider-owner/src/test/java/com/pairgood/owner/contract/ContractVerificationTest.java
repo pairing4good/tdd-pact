@@ -25,7 +25,8 @@ public class ContractVerificationTest {
 
     @BeforeEach
     public void setUp(PactVerificationContext context){
-        context.setTarget(new HttpTestTarget("localhost", port));
+      System.setProperty("pact.verifier.publishResults", "true");
+      context.setTarget(new HttpTestTarget("localhost", port));
     }
 
     @TestTemplate

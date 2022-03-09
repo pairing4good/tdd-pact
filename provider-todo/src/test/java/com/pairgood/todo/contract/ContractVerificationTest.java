@@ -33,7 +33,7 @@ public class ContractVerificationTest {
 
     @BeforeEach
     public void setUp(PactVerificationContext context){
-
+      System.setProperty("pact.verifier.publishResults", "true");
       given(ownerService.findById(anyLong())).willReturn(new Owner(1L, "testUsername"));
         context.setTarget(new HttpTestTarget("localhost", port));
     }
