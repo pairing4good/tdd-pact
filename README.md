@@ -41,7 +41,7 @@ http://localhost:3000/todo
 ]
 ```
 
-However, however each consumer uses the response in different ways.  The consumer-todo-all app simply lists all of the todo descriptions in a list.  While consumer-todo-all only cares about the description field, the consumer-todo-due app also uses the dueDate field and sorts the list of todo's by due date.  Each of the 4 consumer apps use the provider's response slightly differently.  These different consumer expectations are called contracts or pacts.  As a provider gains more consumers it's important for the provider to understand how each consumer is using thier service.  [Contract tests](https://docs.pact.io/) solve this problem.  
+However, each consumer uses the response in different ways.  The consumer-todo-all app simply lists all of the todo descriptions in a list.  While consumer-todo-all only cares about the description field, the consumer-todo-due app also uses the dueDate field and sorts the list of todo's by due date.  Each of the 4 consumer apps use the provider's response slightly differently.  These different consumer expectations are called contracts or pacts.  As a provider gains more consumers it's important for the provider to understand how each consumer is using thier service.  [Contract tests](https://docs.pact.io/) solve this problem.  
 
 > **Contract tests** assert that inter-application messages conform to a shared understanding that is documented in a contract. https://docs.pact.io/
 
